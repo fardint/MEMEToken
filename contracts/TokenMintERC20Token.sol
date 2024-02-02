@@ -66,12 +66,11 @@ contract TokenMintERC20Token is ERC20 {
     }
 
     // TRANSFER FROM NEED to be added
-    function transfer(address to, uint256 value) public returns (bool) {
-      require(block.timestamp - _launchTime >= 72 hours || whitelisted[msg.sender], "Transfer restricted for 72 hours after launch");
-
-      _transfer(msg.sender, to, value);
-      return true;
+    function _transfer(address sender, address recipient, uint256 amount) internal {
+      require(block.timestamp >= _launchTime + 72 hours || whitelisted[sender], "Transfer restricted for 72 hours after launch");
+      super._transfer(sender, recipient, amount);
     }
+
 
     function whitelistAddresses(
         address[] memory addresses
